@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2024 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -32,6 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -48,13 +48,104 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+void clearAllClock();
+void setNumberOnClock(int num);
+void clearNumberOnClock(int num);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void clearAllClock(){
+	  HAL_GPIO_WritePin(GPIOA, LED_RED_1_Pin|LED_RED_2_Pin|LED_RED_3_Pin|LED_RED_4_Pin
+	                          |LED_RED_5_Pin|LED_RED_6_Pin|LED_RED_7_Pin|LED_RED_8_Pin
+	                          |LED_RED_9_Pin|LED_RED_10_Pin|LED_RED_11_Pin|LED_RED_12_Pin, GPIO_PIN_SET);
+}
+void setNumberOnClock(int num)
+{
+	switch(num)
+	{
+		case 0:
+			HAL_GPIO_WritePin(LED_RED_12_GPIO_Port, LED_RED_12_Pin, GPIO_PIN_RESET);
+			break;
+		case 1:
+			HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, GPIO_PIN_RESET);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(LED_RED_2_GPIO_Port, LED_RED_2_Pin, GPIO_PIN_RESET);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(LED_RED_3_GPIO_Port, LED_RED_3_Pin, GPIO_PIN_RESET);
+			break;
+		case 4:
+			HAL_GPIO_WritePin(LED_RED_4_GPIO_Port, LED_RED_4_Pin, GPIO_PIN_RESET);
+			break;
+		case 5:
+			HAL_GPIO_WritePin(LED_RED_5_GPIO_Port, LED_RED_5_Pin, GPIO_PIN_RESET);
+			break;
+		case 6:
+			HAL_GPIO_WritePin(LED_RED_6_GPIO_Port, LED_RED_6_Pin, GPIO_PIN_RESET);
+			break;
+		case 7:
+			HAL_GPIO_WritePin(LED_RED_7_GPIO_Port, LED_RED_7_Pin, GPIO_PIN_RESET);
+			break;
+		case 8:
+			HAL_GPIO_WritePin(LED_RED_8_GPIO_Port, LED_RED_8_Pin, GPIO_PIN_RESET);
+			break;
+		case 9:
+			HAL_GPIO_WritePin(LED_RED_9_GPIO_Port, LED_RED_9_Pin, GPIO_PIN_RESET);
+			break;
+		case 10:
+			HAL_GPIO_WritePin(LED_RED_10_GPIO_Port, LED_RED_10_Pin, GPIO_PIN_RESET);
+			break;
+		case 11:
+			HAL_GPIO_WritePin(LED_RED_11_GPIO_Port, LED_RED_11_Pin, GPIO_PIN_RESET);
+			break;
+	}
+}
+void clearNumberOnClock(int num)
+{
+	switch(num)
+	{
+		case 0:
+			HAL_GPIO_WritePin(LED_RED_12_GPIO_Port, LED_RED_12_Pin, GPIO_PIN_SET);
+			break;
+		case 1:
+			HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, GPIO_PIN_SET);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(LED_RED_2_GPIO_Port, LED_RED_2_Pin, GPIO_PIN_SET);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(LED_RED_3_GPIO_Port, LED_RED_3_Pin, GPIO_PIN_SET);
+			break;
+		case 4:
+			HAL_GPIO_WritePin(LED_RED_4_GPIO_Port, LED_RED_4_Pin, GPIO_PIN_SET);
+			break;
+		case 5:
+			HAL_GPIO_WritePin(LED_RED_5_GPIO_Port, LED_RED_5_Pin, GPIO_PIN_SET);
+			break;
+		case 6:
+			HAL_GPIO_WritePin(LED_RED_6_GPIO_Port, LED_RED_6_Pin, GPIO_PIN_SET);
+			break;
+		case 7:
+			HAL_GPIO_WritePin(LED_RED_7_GPIO_Port, LED_RED_7_Pin, GPIO_PIN_SET);
+			break;
+		case 8:
+			HAL_GPIO_WritePin(LED_RED_8_GPIO_Port, LED_RED_8_Pin, GPIO_PIN_SET);
+			break;
+		case 9:
+			HAL_GPIO_WritePin(LED_RED_9_GPIO_Port, LED_RED_9_Pin, GPIO_PIN_SET);
+			break;
+		case 10:
+			HAL_GPIO_WritePin(LED_RED_10_GPIO_Port, LED_RED_10_Pin, GPIO_PIN_SET);
+			break;
+		case 11:
+			HAL_GPIO_WritePin(LED_RED_11_GPIO_Port, LED_RED_11_Pin, GPIO_PIN_SET);
+			break;
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -73,7 +164,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  int s,m,h;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -91,122 +182,39 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int red=1, yellow=0, green=0;
-  int counter = 0;
   while (1)
   {
+	  if (s>=60){
+		  s=0;
+		  m+=5;
+	  }
+	  if(m>=60){
+		  m=0;
+		  h++;
+	  }
+	  if(h>=24){
+		  h=0;
+	  }
+
+	  int display_s, display_m , display_h;
+
+	  display_s = s/5%12;
+	  display_m = m/5%12;
+	  display_h = h%12;
+
+	  clearAllClock();
+	  setNumberOnClock(display_s);
+	  setNumberOnClock(display_m);
+	  setNumberOnClock(display_h);
+	  s+=5;
+	  HAL_Delay(100);
     /* USER CODE END WHILE */
-	  counter++;
-	  if(red==1 && counter >= 5) {
-		  HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, SET);
-		  HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, RESET);
 
-		  HAL_GPIO_WritePin(LED_RED_2_GPIO_Port, LED_RED_2_Pin, SET);
-		  HAL_GPIO_WritePin(LED_YELLOW_2_GPIO_Port, LED_YELLOW_2_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_GREEN_2_GPIO_Port, LED_GREEN_2_Pin, RESET);
-		  red = 0;
-		  yellow = 1;
-		  counter = 0;
-	  }
-
-	  if(yellow==1 && counter >= 2) {
-		  HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin, SET);
-		  HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, RESET);
-
-		  HAL_GPIO_WritePin(LED_RED_2_GPIO_Port, LED_RED_2_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_YELLOW_2_GPIO_Port, LED_YELLOW_2_Pin, SET);
-		  HAL_GPIO_WritePin(LED_GREEN_2_GPIO_Port, LED_GREEN_2_Pin, RESET);
-		  yellow = 0;
-		  green = 1;
-		  counter = 0;
-	  }
-
-	  if(green==1 && counter >= 3) {
-		  HAL_GPIO_WritePin(LED_RED_1_GPIO_Port, LED_RED_1_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_YELLOW_1_GPIO_Port, LED_YELLOW_1_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_GREEN_1_GPIO_Port, LED_GREEN_1_Pin, SET);
-
-		  HAL_GPIO_WritePin(LED_RED_2_GPIO_Port, LED_RED_2_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_YELLOW_2_GPIO_Port, LED_YELLOW_2_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_GREEN_2_GPIO_Port, LED_GREEN_2_Pin, SET);
-		  green = 0;
-		  red = 1;
-		  counter = 0;
-
-	  }
-	  display7SEG(counter);
-	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
+
   /* USER CODE END 3 */
 }
-
-void display7SEG(int num) {
-	switch(num) {
-	case 0:
-		HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOB, g_Pin, GPIO_PIN_SET);
-		break;
-	case 1:
-		 HAL_GPIO_WritePin(GPIOB, b_Pin|c_Pin, GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB, a_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_SET);
-		break;
-	case 2:
-		HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin | d_Pin
-				                          |e_Pin|g_Pin, GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB,c_Pin|f_Pin, GPIO_PIN_SET);
-		break;
-	case 3:
-		HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-				                          |g_Pin, GPIO_PIN_RESET);
-				  HAL_GPIO_WritePin(GPIOB, e_Pin|f_Pin, GPIO_PIN_SET);
-		break;
-	case 4:
-		HAL_GPIO_WritePin(GPIOB, b_Pin|c_Pin |f_Pin|g_Pin, GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB, a_Pin|d_Pin|e_Pin, GPIO_PIN_SET);
-		break;
-	case 5:
-		 HAL_GPIO_WritePin(GPIOB, a_Pin|c_Pin|d_Pin
-				                          |f_Pin|g_Pin, GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB,b_Pin|e_Pin, GPIO_PIN_SET);
-		break;
-	case 6:
-		HAL_GPIO_WritePin(GPIOB,b_Pin, GPIO_PIN_SET);
-
-				  HAL_GPIO_WritePin(GPIOB, a_Pin|c_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-		break;
-	case 7:
-		 HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin , GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB, d_Pin |e_Pin|f_Pin|g_Pin, GPIO_PIN_SET);
-		break;
-	case 8:
-		HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-		break;
-	case 9:
-		 HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-
-				  HAL_GPIO_WritePin(GPIOB, e_Pin, GPIO_PIN_SET);
-		break;
-	default:
-		HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-				                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-		break;
-	}
-}
-
 
 /**
   * @brief System Clock Configuration
@@ -228,6 +236,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -251,37 +260,30 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_1_Pin|LED_YELLOW_1_Pin|LED_GREEN_1_Pin|LED_RED_2_Pin
-                          |LED_YELLOW_2_Pin|LED_GREEN_2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_1_Pin|LED_RED_2_Pin|LED_RED_3_Pin|LED_RED_4_Pin
+                          |LED_RED_5_Pin|LED_RED_6_Pin|LED_RED_7_Pin|LED_RED_8_Pin
+                          |LED_RED_9_Pin|LED_RED_10_Pin|LED_RED_11_Pin|LED_RED_12_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
-                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LED_RED_1_Pin LED_YELLOW_1_Pin LED_GREEN_1_Pin LED_RED_2_Pin
-                           LED_YELLOW_2_Pin LED_GREEN_2_Pin */
-  GPIO_InitStruct.Pin = LED_RED_1_Pin|LED_YELLOW_1_Pin|LED_GREEN_1_Pin|LED_RED_2_Pin
-                          |LED_YELLOW_2_Pin|LED_GREEN_2_Pin;
+  /*Configure GPIO pins : LED_RED_1_Pin LED_RED_2_Pin LED_RED_3_Pin LED_RED_4_Pin
+                           LED_RED_5_Pin LED_RED_6_Pin LED_RED_7_Pin LED_RED_8_Pin
+                           LED_RED_9_Pin LED_RED_10_Pin LED_RED_11_Pin LED_RED_12_Pin */
+  GPIO_InitStruct.Pin = LED_RED_1_Pin|LED_RED_2_Pin|LED_RED_3_Pin|LED_RED_4_Pin
+                          |LED_RED_5_Pin|LED_RED_6_Pin|LED_RED_7_Pin|LED_RED_8_Pin
+                          |LED_RED_9_Pin|LED_RED_10_Pin|LED_RED_11_Pin|LED_RED_12_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : a_Pin b_Pin c_Pin d_Pin
-                           e_Pin f_Pin g_Pin */
-  GPIO_InitStruct.Pin = a_Pin|b_Pin|c_Pin|d_Pin
-                          |e_Pin|f_Pin|g_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -299,8 +301,6 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
-
-
   }
   /* USER CODE END Error_Handler_Debug */
 }
@@ -321,5 +321,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
